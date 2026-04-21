@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakshi Choudhary — Performance Marketer</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --orange: #FF5C28;
+    --orange2: #FF8A5C;
+    --cream: #F5EDD8;
+    --white: #ffffff;
+    --gray: #888;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-follower {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--orange);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.5;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,10,0.7);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: none;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--orange2); transform: scale(1.04); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding: 140px 60px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* BIG CIRCLE BG */
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,92,40,0.15) 0%, transparent 70%);
+    right: -100px; top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .hero-greeting {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,92,40,0.1);
+    border: 1px solid rgba(255,92,40,0.25);
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: var(--orange2);
+    margin-bottom: 28px;
+    animation: fadeSlideUp 0.8s ease both;
+  }
+  .greeting-dot {
+    width: 7px; height: 7px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.2rem, 5.5vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    animation: fadeSlideUp 0.8s 0.15s ease both;
+  }
+  .hero-name .highlight {
+    color: var(--orange);
+    display: inline-block;
+    position: relative;
+  }
+  .hero-name .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 0; right: 0;
+    height: 3px;
+    background: var(--orange);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: lineGrow 0.6s 1s ease both;
+  }
+  @keyframes lineGrow { to { transform: scaleX(1); } }
+
+  .hero-role {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 400;
+    color: var(--gray);
+    margin-top: 12px;
+    margin-bottom: 28px;
+    letter-spacing: 0.01em;
+    animation: fadeSlideUp 0.8s 0.25s ease both;
+  }
+
+  .hero-bio {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.6);
+    max-width: 480px;
+    animation: fadeSlideUp 0.8s 0.35s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; margin-top: 40px;
+    animation: fadeSlideUp 0.8s 0.45s ease both;
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); background: var(--orange2); }
+  .btn-outline {
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--orange); transform: translateY(-2px); }
+
+  /* Floating tags */
+  .hero-right {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeSlideUp 0.8s 0.1s ease both;
+  }
+
+  .avatar-ring {
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 60%, #1a1a1a 100%);
+    display: flex; align-items: flex-end; justify-content: center;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar-initials {
+    font-family: 'Syne', sans-serif;
+    font-size: 7rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.15);
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    letter-spacing: -0.05em;
+  }
+  .avatar-text {
+    position: absolute;
+    bottom: 40px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .float-tag {
+    position: absolute;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-size: 0.82rem;
+    display: flex; align-items: center; gap: 8px;
+    white-space: nowrap;
+    font-weight: 500;
+    animation: float 3s ease-in-out infinite;
+  }
+  .float-tag:nth-child(2) { animation-delay: 0.5s; }
+  .float-tag:nth-child(3) { animation-delay: 1s; }
+  .float-tag:nth-child(4) { animation-delay: 1.5s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .tag-google { top: 30px; left: -20px; }
+  .tag-meta { top: 50%; right: -40px; }
+  .tag-seo { bottom: 50px; left: -40px; }
+  .tag-yrs { bottom: 20px; right: -20px; background: var(--orange); border-color: var(--orange); }
+
+  /* STATS */
+  .stats-bar {
+    padding: 50px 60px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--orange);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-top: 8px;
+  }
+
+  /* SECTION */
+  section { padding: 100px 60px; position: relative; }
+  .section-tag {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--orange);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--orange);
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 60px;
+  }
+  .section-title em {
+    font-style: normal;
+    color: var(--orange);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .skill-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .skill-card:hover { border-color: rgba(255,92,40,0.3); transform: translateY(-4px); }
+  .skill-card:hover::before { opacity: 1; }
+  .skill-card-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  .skill-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .skill-pills {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .skill-pill {
+    background: rgba(255,92,40,0.08);
+    border: 1px solid rgba(255,92,40,0.15);
+    color: var(--orange2);
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* EXPERIENCE */
+  .exp-timeline { position: relative; }
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--orange), transparent);
+  }
+  .exp-item {
+    padding-left: 44px;
+    margin-bottom: 56px;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.6s ease;
+  }
+  .exp-item.visible { opacity: 1; transform: translateX(0); }
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -5px; top: 8px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 3px rgba(255,92,40,0.2);
+  }
+  .exp-date {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .exp-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .exp-company {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .exp-company::before {
+    content: '';
+    width: 4px; height: 4px;
+    background: var(--orange);
+    border-radius: 50%;
+  }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.65);
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-size: 0.8rem;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(255,92,40,0.3); }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,92,40,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .project-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(255,92,40,0.1);
+    line-height: 1;
+    position: absolute;
+    top: 24px; right: 32px;
+  }
+  .project-icon { font-size: 2.2rem; margin-bottom: 20px; }
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .project-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.6);
+  }
+  .project-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 24px;
+  }
+  .project-tag {
+    background: rgba(255,255,255,0.05);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.73rem;
+    color: var(--gray);
+    font-weight: 500;
+  }
+
+  /* EDUCATION */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .edu-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    display: flex; gap: 20px;
+    transition: border-color 0.3s;
+  }
+  .edu-card:hover { border-color: rgba(255,92,40,0.3); }
+  .edu-icon {
+    width: 48px; height: 48px;
+    background: rgba(255,92,40,0.1);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .edu-degree {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .edu-school { font-size: 0.85rem; color: var(--gray); margin-bottom: 4px; }
+  .edu-year { font-size: 0.78rem; color: var(--orange); font-weight: 500; }
+
+  /* CONTACT */
+  .contact-section {
+    background: linear-gradient(135deg, rgba(255,92,40,0.08) 0%, transparent 60%);
+    border: 1px solid var(--border);
+    border-radius: 32px;
+    padding: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 0 60px 100px;
+  }
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,92,40,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .contact-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 16px;
+  }
+  .contact-sub {
+    font-size: 1rem;
+    color: var(--gray);
+    margin-bottom: 40px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+  .contact-links {
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+  }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 24px;
+    border-radius: 100px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+    font-weight: 500;
+  }
+  .contact-link:hover { border-color: var(--orange); transform: translateY(-3px); }
+  .contact-link.primary { background: var(--orange); border-color: var(--orange); }
+  .contact-link.primary:hover { background: var(--orange2); }
+
+  /* FOOTER */
+  footer {
+    padding: 30px 60px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--gray);
+    font-size: 0.8rem;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; }
+    .hero-right { order: -1; }
+    .avatar-ring { width: 240px; height: 240px; }
+    section { padding: 60px 24px; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); padding: 40px 24px; }
+    .skills-grid, .projects-grid, .edu-grid { grid-template-columns: 1fr; }
+    .contact-section { margin: 0 24px 60px; padding: 50px 30px; }
+    footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sakshi<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:sakshichoudharyyyy04@gmail.com" class="nav-cta">Hire Me ↗</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-greeting">
+      <span class="greeting-dot"></span>
+      Available for opportunities
+    </div>
+    <h1 class="hero-name">
+      I'm <span class="highlight">Sakshi</span><br>Choudhary
+    </h1>
+    <p class="hero-role">Performance Marketing Specialist</p>
+    <p class="hero-bio">Results-driven marketer with 3 years of experience turning ad spend into measurable growth. I run campaigns that actually convert — across Google Ads, Meta, and beyond.</p>
+    <div class="hero-actions">
+      <a href="#experience" class="btn-primary">View My Work ↓</a>
+      <a href="mailto:sakshichoudharyyyy04@gmail.com" class="btn-outline">Let's Talk</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="float-tag tag-google">📊 Google Ads</div>
+    <div class="avatar-ring">
+      <span class="avatar-initials">SC</span>
+      <span class="avatar-text">New Delhi</span>
+    </div>
+    <div class="float-tag tag-meta">📱 Meta Ads</div>
+    <div class="float-tag tag-seo">🔍 SEO</div>
+    <div class="float-tag tag-yrs">3 Yrs Exp.</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat-item">
+    <span class="stat-num" data-target="10">0</span>
+    <div class="stat-label">Shopify Stores Launched</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="25">0</span>
+    <div class="stat-label" style="font-size:0.78rem">% Backlink Growth</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="3">0</span>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="4">0</span>
+    <div class="stat-label">Companies Served</div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-tag">Expertise</div>
+  <h2 class="section-title reveal">What I <em>bring</em><br>to the table</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-card-icon">🎯</div>
+      <div class="skill-card-title">Performance Marketing</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Google Ads</span>
+        <span class="skill-pill">Meta Ads</span>
+        <span class="skill-pill">A/B Testing</span>
+        <span class="skill-pill">Campaign Optimization</span>
+        <span class="skill-pill">Lead Generation</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">🔍</div>
+      <div class="skill-card-title">SEO & Analytics</div>
+      <div class="skill-pills">
+        <span class="skill-pill">SEO</span>
+        <span class="skill-pill">SEMrush</span>
+        <span class="skill-pill">Google Keyword Planner</span>
+        <span class="skill-pill">Ubersuggest</span>
+        <span class="skill-pill">Competitor Analysis</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">⚡</div>
+      <div class="skill-card-title">Tools & Platforms</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Canva</span>
+        <span class="skill-pill">WordPress</span>
+        <span class="skill-pill">Shopify</span>
+        <span class="skill-pill">ChatGPT</span>
+        <span class="skill-pill">Video Editing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" style="background: rgba(255,255,255,0.01);">
+  <div class="section-tag">Career</div>
+  <h2 class="section-title reveal">Experience &<br><em>impact</em></h2>
+  <div class="exp-timeline">
+
+    <div class="exp-item">
+      <div class="exp-date">Oct 2025 — Present</div>
+      <div class="exp-role">Performance Marketer</div>
+      <div class="exp-company">Jaiswal Software & Company · Delhi</div>
+      <ul class="exp-bullets">
+        <li>Planned, executed, and optimized paid lead generation campaigns across Google Ads and Meta</li>
+        <li>Improved CPL, conversion rates, and overall funnel performance</li>
+        <li>Managed end-to-end campaign execution including ads, landing pages, and tracking</li>
+        <li>Conducted A/B testing and scaled high-performing campaigns</li>
+        <li>Collaborated with sales and creative teams to enhance lead quality and ROI</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">May 2025 — Jul 2025</div>
+      <div class="exp-role">Digital Marketing Executive</div>
+      <div class="exp-company">National Marketing Projects</div>
+      <ul class="exp-bullets">
+        <li>Executed online marketing campaigns to increase brand reach and engagement</li>
+        <li>Ran Facebook and Google ad campaigns to drive sales</li>
+        <li>Managed e-commerce stores and improved user experience</li>
+        <li>Designed social media creatives and built responsive websites</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Apr 2023 — Apr 2025</div>
+      <div class="exp-role">Digital Marketing Executive</div>
+      <div class="exp-company">Decoracion Digital Marketing Services</div>
+      <ul class="exp-bullets">
+        <li>Developed and implemented marketing strategies contributing to revenue growth</li>
+        <li>Managed social media accounts to improve engagement and visibility</li>
+        <li>Built and maintained websites on WordPress and Shopify</li>
+        <li>Developed 10+ Shopify websites for D2C and fashion brands</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Feb 2023 — Apr 2023</div>
+      <div class="exp-role">Digital Marketing Intern</div>
+      <div class="exp-company">Only Digital Way</div>
+      <ul class="exp-bullets">
+        <li>Increased quality backlinks by 25% through link-building strategies</li>
+        <li>Reduced bounce rate from 55% to 30% via SEO improvements</li>
+        <li>Achieved top-10 Google rankings for targeted keywords</li>
+        <li>Conducted keyword research and competitor analysis</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-tag">Work</div>
+  <h2 class="section-title reveal">Featured<br><em>projects</em></h2>
+  <div class="projects-grid reveal">
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <div class="project-icon">🛍️</div>
+      <div class="project-title">Shopify Store Development</div>
+      <p class="project-desc">Developed and launched 10+ Shopify websites for D2C and fashion brands, optimizing user experience and conversion funnels for maximum revenue.</p>
+      <div class="project-tags">
+        <span class="project-tag">Shopify</span>
+        <span class="project-tag">D2C</span>
+        <span class="project-tag">UX Optimization</span>
+        <span class="project-tag">Fashion</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <div class="project-icon">📈</div>
+      <div class="project-title">Performance Marketing Campaigns</div>
+      <p class="project-desc">Managed and scaled multiple paid campaigns across Google and Meta, consistently improving lead quality, reducing CPL, and maximizing ROI for clients.</p>
+      <div class="project-tags">
+        <span class="project-tag">Google Ads</span>
+        <span class="project-tag">Meta Ads</span>
+        <span class="project-tag">Lead Gen</span>
+        <span class="project-tag">A/B Testing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section>
+  <div class="section-tag">Education</div>
+  <h2 class="section-title reveal">Academic<br><em>background</em></h2>
+  <div class="edu-grid reveal">
+    <div class="edu-card">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-degree">Bachelor of Arts (BA)</div>
+        <div class="edu-school">University of Delhi</div>
+        <div class="edu-year">2022 — 2025</div>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-icon">📚</div>
+      <div>
+        <div class="edu-degree">Senior Secondary, Humanities</div>
+        <div class="edu-school">CBSE</div>
+        <div class="edu-year">2021 — 2022</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section reveal" id="contact">
+  <h2 class="contact-title">Let's build something<br><em style="color:var(--orange);font-style:normal">together</em></h2>
+  <p class="contact-sub">Open to performance marketing roles, freelance campaigns, and consulting projects. Based in New Delhi — available remote.</p>
+  <div class="contact-links">
+    <a href="mailto:sakshichoudharyyyy04@gmail.com" class="contact-link primary">✉ sakshichoudharyyyy04@gmail.com</a>
+    <a href="tel:+917982222982" class="contact-link">📞 +91-7982222982</a>
+    <a href="#" class="contact-link">📍 Dwarka Mor, New Delhi</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Sakshi Choudhary. All rights reserved.</span>
+  <span style="color:var(--orange)">Performance Marketing · Google Ads · Meta Ads · SEO</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+  function animateFollower() {
+    fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+    follower.style.left = fx + 'px'; follower.style.top = fy + 'px';
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal, .exp-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Counter animation
+  const counters = document.querySelectorAll('[data-target]');
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = +el.dataset.target;
+        const suffix = el.dataset.suffix || (target === 25 ? '%' : '+');
+        let count = 0;
+        const step = Math.ceil(target / 40);
+        const timer = setInterval(() => {
+          count += step;
+          if (count >= target) { count = target; clearInterval(timer); }
+          el.textContent = count + suffix;
+        }, 40);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => counterObserver.observe(c));
+</script>
+</body>
+</html>
